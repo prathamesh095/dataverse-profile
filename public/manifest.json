@@ -1,0 +1,42 @@
+{
+  "name": "Prathamesh Sanjay Pawar | Data Analyst & Data Scientist",
+  "short_name": "Prathamesh",
+  "description": "Portfolio of Prathamesh Sanjay Pawar — Data Analyst & Data Scientist specializing in machine learning, data visualization, and business intelligence.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0a",
+  "theme_color": "#00bcd4",
+  "scope": "/",
+  "id": "/",
+  "icons": [
+    {
+      "src": "https://cdn.jsdelivr.net/gh/edent/SuperTinyIcons/images/svg/github.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "https://cdn.jsdelivr.net/gh/edent/SuperTinyIcons/images/svg/linkedin.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://raw.githubusercontent.com/GoogleChrome/lighthouse/master/assets/example-screenshots/lighthouse-pwa.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/GoogleChrome/lighthouse/master/assets/example-screenshots/lighthouse-pwa-mobile.png",
+      "sizes": "540x960",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": ["portfolio", "developer", "data-science", "analytics"],
+  "lang": "en"
+}
