@@ -1,6 +1,6 @@
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
-import { SkillsMatrix } from "@/components/skills-matrix"
+import { SkillsMatrix } from "@/components/skills/SkillsMatrix"
 import { CertificationsGrid } from "@/components/certifications-grid"
 
 export const metadata = {
