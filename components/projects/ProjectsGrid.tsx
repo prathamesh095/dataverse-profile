@@ -13,19 +13,19 @@ import { FeaturedProjectCard } from "./cards/FeaturedProjectCard";
 import { ProjectCard } from "./cards/ProjectCard";
 import { ProjectPreviewDialog } from "./preview/ProjectPreviewDialog";
 
-/* Icons (Lucide handled inside components) */
+/* Icons */
 import { Blocks, Layers, Code, Filter, Zap } from "lucide-react";
 
 /**
- * ProjectsGrid — Main orchestrator
- * --------------------------------------------------------------
- * This component stitches together all modular parts:
- *   - Controls (search/filter/sort/view)
- *   - Stats summary cards
- *   - Featured project
- *   - Grid/List display
- *   - Preview dialog
- * --------------------------------------------------------------
+ * ProjectsGrid — Main Orchestrator
+ * -------------------------------------------------------------------
+ * Handles:
+ *   - Search, Filter, and Sort logic
+ *   - Featured Project showcase
+ *   - Animated Grid/List rendering
+ *   - Project preview modal
+ *   - Navigation to /projects/[id]
+ * -------------------------------------------------------------------
  */
 export function ProjectsGrid(): JSX.Element {
   const [previewProject, setPreviewProject] = useState<Project | null>(null);
@@ -40,10 +40,14 @@ export function ProjectsGrid(): JSX.Element {
   const openPreview = useCallback((p: Project) => setPreviewProject(p), []);
   const closePreview = useCallback(() => setPreviewProject(null), []);
 
+  /* ===============================================
+     CATEGORIES / DOMAINS / TECH COUNTS
+  =============================================== */
   const availableCategories = useMemo(
     () => Array.from(new Set(projects.map((p) => p.category))).sort(),
     []
   );
+
   const availableDomains = useMemo(
     () => Array.from(new Set(projects.map((p) => p.domain))).sort(),
     []
@@ -55,11 +59,15 @@ export function ProjectsGrid(): JSX.Element {
     return set.size;
   }, []);
 
+  /* ===============================================
+     FILTERING + SORTING
+  =============================================== */
   const filteredProjects = useMemo(() => {
     let list = projects;
 
     if (selectedCategory !== "all") list = list.filter((p) => p.category === selectedCategory);
     if (selectedDomain !== "all") list = list.filter((p) => p.domain === selectedDomain);
+
     if (debouncedSearch) {
       const q = debouncedSearch.toLowerCase();
       list = list.filter(
@@ -85,6 +93,9 @@ export function ProjectsGrid(): JSX.Element {
     });
   }, [selectedCategory, selectedDomain, debouncedSearch, sortBy]);
 
+  /* ===============================================
+     FEATURED PROJECT + STATS
+  =============================================== */
   const featuredProject = useMemo(
     () => projects.find((p) => p.id === "strategic-merger-ott") ?? projects[0],
     []
@@ -99,14 +110,16 @@ export function ProjectsGrid(): JSX.Element {
     return { avgYear, techs, displayed: filteredProjects.length };
   }, [filteredProjects]);
 
-  // Preload featured image for smoother UX
   useEffect(() => {
     if (featuredProject?.image) {
-      const img = document.createElement("img");
+      const img = new Image();
       img.src = featuredProject.image;
     }
   }, [featuredProject]);
 
+  /* ===============================================
+     RENDER
+  =============================================== */
   return (
     <div
       className="min-h-screen py-12 px-4 sm:px-6 lg:px-8"
@@ -114,7 +127,7 @@ export function ProjectsGrid(): JSX.Element {
       aria-label="Projects Portfolio"
     >
       <div className="max-w-7xl mx-auto space-y-12">
-        {/* HEADER */}
+        {/* ===== Header ===== */}
         <motion.section
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -129,12 +142,12 @@ export function ProjectsGrid(): JSX.Element {
             Projects Showcase
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Explore real-world solutions across domains with live demos, code, and performance
-            metrics.
+            Explore practical data science and machine learning projects with code,
+            dashboards, and live results.
           </p>
         </motion.section>
 
-        {/* STATS */}
+        {/* ===== Stats Section ===== */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -145,13 +158,13 @@ export function ProjectsGrid(): JSX.Element {
             { label: "Total Projects", value: projects.length, icon: Blocks },
             { label: "Categories", value: availableCategories.length, icon: Layers },
             { label: "Technologies", value: uniqueTechCount, icon: Code },
-            { label: "Displayed", value: stats.displayed, icon: Filter },
+            { label: "Visible", value: stats.displayed, icon: Filter },
           ].map((s) => (
             <StatsCard key={s.label} label={s.label} value={s.value} icon={s.icon} />
           ))}
         </motion.section>
 
-        {/* FEATURED PROJECT */}
+        {/* ===== Featured Project ===== */}
         {featuredProject && (
           <section className="mb-12">
             <h2 className="text-2xl font-bold mb-6">Featured Project</h2>
@@ -159,7 +172,7 @@ export function ProjectsGrid(): JSX.Element {
           </section>
         )}
 
-        {/* ALL PROJECTS */}
+        {/* ===== All Projects ===== */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -168,16 +181,19 @@ export function ProjectsGrid(): JSX.Element {
         >
           <header className="flex justify-between items-center flex-wrap gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-lg bg-linear-to-br from-primary to-secondary flex items-center justify-center">
+              <div className="w-12 h-12 rounded-lg bg-linear-to-br from-primary to-accent flex items-center justify-center">
                 <Filter className="w-6 h-6 text-white" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-foreground">All Projects</h2>
-                <p className="text-sm text-muted-foreground">Filter and explore the full portfolio</p>
+                <p className="text-sm text-muted-foreground">
+                  Filter, search, and explore all case studies.
+                </p>
               </div>
             </div>
           </header>
 
+          {/* ===== Controls ===== */}
           <Controls
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -194,11 +210,12 @@ export function ProjectsGrid(): JSX.Element {
             setViewMode={setViewMode}
           />
 
+          {/* ===== Grid/List Rendering ===== */}
           <div
             className={cn(
               "gap-6",
               viewMode === "grid"
-                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
                 : "space-y-6"
             )}
             role="list"
@@ -206,12 +223,20 @@ export function ProjectsGrid(): JSX.Element {
             <AnimatePresence mode="popLayout">
               {filteredProjects.length > 0 ? (
                 filteredProjects.map((p) => (
-                  <ProjectCard
+                  <motion.div
                     key={p.id}
-                    project={p}
-                    onPreviewClick={openPreview}
-                    viewMode={viewMode}
-                  />
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {/* ✅ ProjectCard handles its own internal Link now */}
+                    <ProjectCard
+                      project={p}
+                      viewMode={viewMode}
+                      onPreviewClick={openPreview}
+                    />
+                  </motion.div>
                 ))
               ) : (
                 <motion.p
@@ -221,14 +246,14 @@ export function ProjectsGrid(): JSX.Element {
                   role="status"
                   aria-live="polite"
                 >
-                  No projects match your filters. Try adjusting your search.
+                  No projects found. Try adjusting your filters.
                 </motion.p>
               )}
             </AnimatePresence>
           </div>
         </motion.section>
 
-        {/* FOOTER */}
+        {/* ===== Footer Summary ===== */}
         <motion.footer
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -236,14 +261,15 @@ export function ProjectsGrid(): JSX.Element {
           className="border-t border-primary/20 pt-8 text-center"
         >
           <p className="text-sm text-muted-foreground">
-            Total:{" "}
-            <span className="font-bold text-foreground">{projects.length}</span> • Showing:{" "}
-            <span className="font-bold text-primary">{filteredProjects.length}</span>
+            Showing{" "}
+            <span className="font-semibold text-primary">{filteredProjects.length}</span> of{" "}
+            <span className="font-semibold text-foreground">{projects.length}</span> total
+            projects.
           </p>
         </motion.footer>
       </div>
 
-      {/* PROJECT PREVIEW DIALOG */}
+      {/* ===== Project Preview Modal ===== */}
       <ProjectPreviewDialog project={previewProject} onClose={closePreview} />
     </div>
   );

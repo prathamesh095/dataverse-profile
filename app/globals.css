@@ -5,7 +5,7 @@
 
 :root {
   /* =================================================================================================
-   * 🎨 LIGHT MODE - UPDATED PDF TOKENS
+   * LIGHT MODE - UPDATED PDF TOKENS
    * ================================================================================================= */
   --background: #F9FAFB;
   --foreground: #0F172A; /* Updated from #1E293B */
@@ -27,29 +27,29 @@
   --input: #F1F5F9; /* Updated from #F3F4F6 */
   --ring: #FF6B6B;
 
-  /* 💎 Semantic Status & Tertiary Accent Tokens */
+  /* Semantic Status & Tertiary Accent Tokens */
   --tertiary: #FF6CAB; /* Updated from #FCA5A5 - Start of tertiary gradient (Text/Logo) */
   --status-success: #00C9A7; /* Match new accent color */
   --status-error: #cc3333;
   --status-warning: #ffb81c;
   --status-info: #5e95ff;
 
-  /* 📏 Surface Elevation Tokens (Adjusted for new muted base) */
+  /* Surface Elevation Tokens (Adjusted for new muted base) */
   --surface-level-0: var(--card);
   --surface-level-1: var(--muted); /* Use muted as card/surface base per PDF suggestion */
   --surface-level-2: var(--input); 
-  
+
   /* Glassmorphism base colors */
   --glass-light-base: 249, 250, 251; /* RGB of #F9FAFB */
   --glass-dark-base: 11, 17, 32; /* RGB of new dark background #0B1120 */
 
-  /* ⏱️ Motion Timing Tokens (Keep existing) */
+  /* Motion Timing Tokens (Keep existing) */
   --motion-duration-fast: 150ms;
   --motion-duration-medium: 300ms;
   --motion-duration-slow: 500ms;
   --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* 📊 Premium Chart Colors (Adjusted to new palette) */
+  /* Premium Chart Colors (Adjusted to new palette) */
   --chart-1: #FF6B6B;
   --chart-2: #5D5FEF;
   --chart-3: #00C9A7;
@@ -58,7 +58,7 @@
 
   --radius: 0.8rem; /* Updated from 0.75rem */
 
-  /* 🆕 NEW: GRADIENT TOKENS (PDF) */
+  /* NEW: GRADIENT TOKENS (PDF) */
   --gradient-primary: linear-gradient(135deg, #FF6B6B, #FFD166);
   --gradient-secondary: linear-gradient(135deg, #5D5FEF, #9C6ADE);
   --gradient-accent: linear-gradient(135deg, #00C9A7, #00E0A1);
@@ -74,19 +74,19 @@
   --sidebar-border: #E5E7EB;
   --sidebar-ring: #FF6B6B;
 
-  /* ✨ PRE EFFECTS */
+  /* PRE EFFECTS */
   --pre-background: #E2E8F0;
   --pre-foreground: #0F172A;
   --pre-border: #E5E7EB;
 }
 
 /* =================================================================================================
- * 🌙 DARK MODE - UPDATED PDF TOKENS
+ * DARK MODE - UPDATED PDF TOKENS
  * ================================================================================================= */
 .dark {
   --background: #0B1120; /* Updated from #0F172A */
   --foreground: #F3F4F6;
-  
+
   /* Surface 1: Elevated dark shade */
   --card: #1C2437; /* Updated from #1A2434 - Use muted as card base */
   --card-foreground: #F3F4F6;
@@ -97,34 +97,34 @@
   --primary-foreground: #0B1120; /* Updated to new background color */
   --secondary: #7C5CDB; /* Updated from #9333EA - Start of secondary gradient (dark) */
   --secondary-foreground: #F3F4F6;
-  
+
   /* Surface 2: Used for subtle containers/inputs/muted areas */
   --muted: #1C2437; /* Updated from #1E293B */
   --input: #1A2335; /* Updated from #1E293B */
-  
+
   --muted-foreground: #B0BACC; 
 
   --accent: #00BFA5; /* Updated from #FCA5A5 - New accent (dark) */
   --accent-foreground: #0B1120; /* Updated to new background color */
   --destructive: #ff5555;
   --destructive-foreground: #fff;
-  
+
   --border: #2C354D; /* Updated from #52637D */
   --ring: #FF7A7A; /* Updated to new dark primary */
 
-  /* 💎 Semantic Status & Tertiary Accent Tokens (Dark) */
+  /* Semantic Status & Tertiary Accent Tokens (Dark) */
   --tertiary: #E14D8C; /* Updated from #1E3A8A - Start of tertiary gradient (dark) */
   --status-success: #00BFA5; /* Match new dark accent color */
   --status-error: #ff5555;
   --status-warning: #ffb81c;
   --status-info: #5e95ff;
 
-  /* 📏 Surface Elevation Tokens (Dark Depth) */
+  /* Surface Elevation Tokens (Dark Depth) */
   --surface-level-0: var(--card);
   --surface-level-1: #1C2437; 
   --surface-level-2: #1A2335; 
 
-  /* 📊 Premium Chart Colors (Dark) */
+  /* Premium Chart Colors (Dark) */
   --chart-1: #FF7A7A;
   --chart-2: #7C5CDB;
   --chart-3: #00BFA5;
@@ -133,7 +133,7 @@
 
   --radius: 0.8rem;
 
-  /* 🆕 NEW: GRADIENT TOKENS (PDF Dark) */
+  /* NEW: GRADIENT TOKENS (PDF Dark) */
   --gradient-primary: linear-gradient(135deg, #FF7A7A, #FFAA33);
   --gradient-secondary: linear-gradient(135deg, #7C5CDB, #B088F9);
   --gradient-accent: linear-gradient(135deg, #00BFA5, #00D4A7);
@@ -149,7 +149,7 @@
   --sidebar-border: #2C354D; 
   --sidebar-ring: #FF7A7A;
 
-  /* ✨ DARK PRE EFFECTS */
+  /* DARK PRE EFFECTS */
   --pre-background: #1C2437;
   --pre-foreground: #F3F4F6;
   --pre-border: #2C354D; 
@@ -213,7 +213,7 @@
 }
 
 /* =================================================================================================
- * 🌟 PREMIUM GLOBAL STYLES & AURORA BACKGROUND
+ * PREMIUM GLOBAL STYLES & AURORA BACKGROUND
  * ================================================================================================= */
 
 @layer base {
@@ -231,16 +231,16 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* ✨ AURORA GRADIENT BACKGROUND (Using existing styles but with updated variables) */
+  /* AURORA GRADIENT BACKGROUND (Using existing styles but with updated variables) */
   html {
     /* Sunset Core: linear-gradient(-45deg, #FF6B6B, #9333EA, #1E3A8A) */
     background: linear-gradient(-45deg, var(--background), var(--secondary), var(--accent), var(--background));
     background-size: 400% 400%;
     animation: aurora-gradient 25s ease infinite;
-    background-attachment: fixed;
+    /* background-attachment: fixed; ← REMOVED TO FIX CHROME LAYOUT STRETCH */
   }
 
-  /* 🌌 Cosmic Aurora Overlay (Using existing styles but with updated variables) */
+  /* Cosmic Aurora Overlay (Using existing styles but with updated variables) */
   html::before {
     content: "";
     position: fixed;
@@ -257,7 +257,7 @@
     animation: aurora-glow 15s ease-in-out infinite;
   }
 
-  /* 🌊 Wave Particle System (Using Highlight/Accent RGBs) */
+  /* Wave Particle System (Using Highlight/Accent RGBs) */
   html::after {
     content: "";
     position: fixed;
@@ -274,7 +274,7 @@
     animation: cosmic-wave 28s ease-in-out infinite;
   }
 
-  /* 🪐 Floating Nebula Blobs */
+  /* Floating Nebula Blobs */
   body::before {
     content: "";
     position: fixed;
@@ -314,7 +314,7 @@
     @apply font-sans font-extrabold text-foreground tracking-tight;
   }
 
-  /* 🆕 UNIQUE TILE FONT FOR HOME PAGE */
+  /* UNIQUE TILE FONT FOR HOME PAGE */
   .font-tile {
     font-family: var(--font-tile);
     font-weight: 800;
@@ -362,7 +362,7 @@
 }
 
 /* =================================================================================================
- * 🚀 PREMIUM ANIMATION KEYFRAMES (RGBs adjusted to new tokens)
+ * PREMIUM ANIMATION KEYFRAMES (RGBs adjusted to new tokens)
  * ================================================================================================= */
 
 @layer base {
@@ -502,7 +502,7 @@
 }
 
 /* =================================================================================================
- * 🎬 PREMIUM ANIMATION UTILITIES (keep existing)
+ * PREMIUM ANIMATION UTILITIES (keep existing)
  * ================================================================================================= */
 
 @layer base {
@@ -545,7 +545,7 @@
 }
 
 /* =================================================================================================
- * 💎 PREMIUM COMPONENT STYLES - UPDATED FOR GRADIENT BUTTONS
+ * PREMIUM COMPONENT STYLES - UPDATED FOR GRADIENT BUTTONS
  * ================================================================================================= */
 
 @layer base {
@@ -654,7 +654,7 @@
 }
 
 /* =================================================================================================
- * ⚡ PERFORMANCE OPTIMIZATIONS (keep existing)
+ * PERFORMANCE OPTIMIZATIONS (keep existing)
  * ================================================================================================= */
 
 @layer base {
@@ -665,7 +665,7 @@
 }
 
 /* =================================================================================================
- * ♿ ACCESSIBILITY & RESPONSIVE (keep existing)
+ * ACCESSIBILITY & RESPONSIVE (keep existing)
  * ================================================================================================= */
 
 @layer base {
@@ -691,13 +691,13 @@
 }
 
 /* =================================================================================================
- * 🌙 DARK MODE ANIMATION & COMPONENT OVERRIDES - IMPLEMENTING PDF RULES
+ * DARK MODE ANIMATION & COMPONENT OVERRIDES - IMPLEMENTING PDF RULES
  * ================================================================================================= */
 
 .dark {
   /* CARD BLUR OVERRIDE */
   .card { backdrop-filter: blur(12px); }
-  
+
   /* DARK MODE PRIMARY BUTTON */
   .btn-primary { background: var(--gradient-primary); color: var(--primary-foreground); box-shadow: 0 0 20px rgba(255, 170, 51, 0.35); }
   .btn-primary:hover { box-shadow: 0 0 30px rgba(255, 170, 51, 0.5); }
@@ -705,7 +705,7 @@
   /* DARK MODE SECONDARY BUTTON */
   .btn-secondary { background: var(--gradient-secondary); color: var(--primary-foreground); box-shadow: none; }
   .btn-secondary:hover { box-shadow: 0 10px 30px 0 rgba(124, 92, 219, 0.4); }
-  
+
   /* OUTLINE BUTTON CONTRAST IN DARK */
   .btn-outline { color: var(--foreground); border-color: var(--primary); background-color: transparent; }
   .btn-outline:hover { background-color: var(--primary); color: var(--primary-foreground); }
@@ -739,6 +739,7 @@
   0%, 100% { box-shadow: 0 0 10px rgba(124, 92, 219, 0.5), 0 0 20px rgba(124, 92, 219, 0.3); }
   50% { box-shadow: 0 0 20px rgba(124, 92, 219, 0.7), 0 0 30px rgba(124, 92, 219, 0.4); }
 }
+
 /* =================================================================================================
  * PREMIUM OUTLINE BUTTON - FIXED ACTIVE/HOVER/FOCUS (Light + Dark)
  * ================================================================================================= */
@@ -747,11 +748,11 @@
     @apply relative overflow-hidden rounded-xl font-medium transition-all duration-300;
     @apply border-2 bg-transparent backdrop-blur-sm;
     @apply flex items-center justify-center gap-2;
-    
+
     /* Light mode - strong border + text */
     border-color: var(--primary);
     color: var(--primary);
-    
+
     /* Dark mode - brighter border + text */
     .dark & {
       border-color: var(--primary);
@@ -805,4 +806,64 @@
       left: 100%;
     }
   }
+}
+
+
+
+/* ============================================================
+   FINAL OPTIMIZED GRID BACKGROUND + GPU BLOBS (REQUIRED)
+   ============================================================ */
+
+/* GRID BACKGROUND */
+.bg-grid-base {
+  background-size: 50px 50px;
+  background-image:
+    linear-gradient(to right, #d4d4d8 0.5px, transparent 1px),
+    linear-gradient(to bottom, #d4d4d8 0.5px, transparent 1px);
+}
+
+.dark .bg-grid-base {
+  background-image:
+    linear-gradient(to right, #2c2c2c 0.5px, transparent 1px),
+    linear-gradient(to bottom, #2c2c2c 0.5px, transparent 1px);
+}
+
+/* BLOBS */
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  will-change: transform;
+  animation: blob-pulse 6s infinite ease-in-out;
+}
+
+.blob-a {
+  top: 20%;
+  left: 20%;
+  width: 22rem;
+  height: 22rem;
+  background: rgba(255, 107, 107, 0.25); /* primary */
+}
+
+.blob-b {
+  bottom: 25%;
+  right: 20%;
+  width: 22rem;
+  height: 22rem;
+  background: rgba(93, 95, 239, 0.25); /* secondary */
+  animation-delay: 1s;
+}
+
+.blob-c {
+  top: 50%;
+  right: 30%;
+  width: 18rem;
+  height: 18rem;
+  background: rgba(0, 201, 167, 0.25); /* accent */
+  animation-delay: 2s;
+}
+
+@keyframes blob-pulse {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(10px, 10px, 0) scale(1.15); }
 }

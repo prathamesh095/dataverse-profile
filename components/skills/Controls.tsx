@@ -1,7 +1,7 @@
 // components/skills/Controls.tsx
 "use client";
 
-import React, { memo, useMemo } from "react";
+import React, { memo } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Grid3X3, List, Search as SearchIcon, Filter } from "lucide-react";
@@ -27,8 +27,8 @@ export const Controls = memo(function Controls({
   setSelectedCategory: (s: string) => void;
   searchQuery: string;
   setSearchQuery: (q: string) => void;
-  sortBy: "level" | "projects" | "certifications";
-  setSortBy: (s: "level" | "projects" | "certifications") => void;
+  sortBy: "level" | "consistency" | "confidence" | "usage";
+  setSortBy: (s: "level" | "consistency" | "confidence" | "usage") => void;
   allSkillsWithCategory: any[];
   skillCategories: SkillCategory[];
   viewMode: "grid" | "list";
@@ -72,7 +72,7 @@ export const Controls = memo(function Controls({
         </div>
 
         <div className="flex gap-2" role="group" aria-label="Sort by">
-          {(["level", "projects", "certifications"] as const).map((sort) => (
+          {(["level", "consistency", "confidence", "usage"] as const).map((sort) => (
             <button key={sort} type="button" onClick={() => setSortBy(sort)} className={cn("flex-1 px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2", sortBy === sort ? "bg-linear-to-r from-primary to-secondary text-white shadow-md" : "bg-muted/80 backdrop-blur-sm text-primary border border-primary/30 hover:bg-primary/10")} aria-pressed={sortBy === sort} aria-label={`Sort by ${sort}`}>
               {sort.charAt(0).toUpperCase() + sort.slice(1)}
             </button>

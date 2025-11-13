@@ -3,15 +3,35 @@
 import React, { memo, useMemo } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { skillCategories, type SkillCategory, type Skill } from "@/lib/skills";
+import { Star as StarIcon } from "lucide-react";
+import {
+  skillCategories,
+  type SkillCategory,
+  type Skill,
+} from "@/lib/skills";
 
-// Extend Skill interface to add optional certifications count
-export interface ExtendedSkill extends Skill {
-  certifications?: number;
+export type ExtendedSkill = Skill & {
+  category: string;
+  consistency?: number;
+  usage?: "High" | "Medium" | "Low";
+  confidence?: "Strong" | "Medium" | "Basic";
+};
+
+interface SkillCardProps {
+  skill: ExtendedSkill;
+  getProficiencyColor: (level: number) => string;
+  getProficiencyLabel: (level: number) => string;
+  getCategoryColor: (categoryId: string) => string;
+  showLastUsed?: boolean;
 }
 
 export const SkillCard = memo(
@@ -20,116 +40,154 @@ export const SkillCard = memo(
     getProficiencyColor,
     getProficiencyLabel,
     getCategoryColor,
-  }: {
-    skill: ExtendedSkill;
-    getProficiencyColor: (level: number) => string;
-    getProficiencyLabel: (level: number) => string;
-    getCategoryColor: (categoryId: string) => string;
-  }) => {
+    showLastUsed = true,
+  }: SkillCardProps) => {
     const category = useMemo(
-      () => skillCategories.find((cat: SkillCategory) => cat.id === skill.category),
+      () =>
+        skillCategories.find(
+          (cat: SkillCategory) => cat.id === skill.category
+        ),
       [skill.category]
     );
-    const certifications = skill.certifications ?? 0;
+
+    const consistency = Math.max(0, Math.min(5, skill.consistency ?? 3));
+    const level = Math.max(0, Math.min(100, skill.level ?? 0));
 
     return (
       <motion.div
         layout
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: -20 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        whileHover={{ y: -4 }}
-        className="group"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        whileHover={{ y: -6, scale: 1.02 }}
+        transition={{ duration: 0.32, ease: "easeOut" }}
+        className="h-full"
       >
-        <Card className="h-full hover:shadow-xl transition-all duration-300 border border-primary/20 bg-card/60 backdrop-blur-sm hover:bg-card/90 overflow-hidden">
-          <CardHeader className="pb-4">
-            <div className="flex items-start justify-between gap-4">
+        <Card className="h-full flex flex-col border border-primary/20 bg-card/80 backdrop-blur-sm hover:bg-card/95 hover:shadow-2xl transition-all duration-300">
+          {/* HEADER */}
+          <CardHeader className="pb-3">
+            <div className="flex items-start justify-between gap-3">
+              {/* Logo */}
               {skill.logo && (
-                <div className="relative w-10 h-10 rounded-md overflow-hidden border border-primary/30 bg-white/40 dark:bg-card/40 flex items-center justify-center shrink-0">
+                <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-primary/20 bg-white/50 shrink-0">
                   <Image
                     src={skill.logo}
-                    alt={`${skill.name} logo`}
+                    alt={skill.name}
                     fill
-                    className="object-contain p-1.5 transition-transform duration-300 group-hover:scale-110"
-                    sizes="40px"
+                    sizes="48px"
+                    className="object-contain p-2"
                   />
                 </div>
               )}
 
-              <div className="flex-1">
-                <CardTitle className="text-lg text-foreground leading-tight group-hover:text-primary transition-colors">
+              {/* Title */}
+              <div className="flex-1 min-w-0">
+                <CardTitle className="text-lg font-bold truncate group-hover:text-primary transition-colors">
                   {skill.name}
                 </CardTitle>
-                <CardDescription className="text-xs mt-1 flex flex-wrap items-center gap-2">
-                  <span>{skill.yearsOfExperience}+ years</span>
-                  <span>• {skill.lastUsed}</span>
+
+                <CardDescription className="text-xs mt-1 flex flex-wrap gap-x-2 text-muted-foreground">
+                  <span>{skill.yearsOfExperience ?? "—"}+ yrs</span>
+
+                  {showLastUsed && skill.lastUsed && (
+                    <>
+                      <span>•</span>
+                      <span>Last used: {skill.lastUsed}</span>
+                    </>
+                  )}
+
+                  <span>•</span>
                   <span className="text-primary font-medium">
-                    {category?.title || skill.category}
+                    {category?.title ?? skill.category}
                   </span>
                 </CardDescription>
               </div>
 
-              <Badge
-                variant="secondary"
-                className={cn(
-                  "text-xs font-semibold whitespace-nowrap shrink-0 border",
-                  skill.level >= 90
-                    ? "bg-primary/10 text-primary border-primary/30"
-                    : skill.level >= 80
-                    ? "bg-secondary/10 text-secondary border-secondary/30"
-                    : skill.level >= 70
-                    ? "bg-tertiary/10 text-tertiary border-tertiary/30"
-                    : "bg-status-success/10 text-status-success border-status-success/30"
-                )}
-              >
-                {getProficiencyLabel(skill.level)}
+              {/* Badge */}
+              <Badge variant="secondary" className="text-xs font-bold">
+                {getProficiencyLabel(level)}
               </Badge>
             </div>
           </CardHeader>
 
-          <CardContent className="space-y-4 pt-0">
-            {/* Progress bar */}
+          {/* BODY */}
+          <CardContent className="flex-1 flex flex-col justify-between pt-2 space-y-6">
+            {/* Proficiency Bar */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-medium text-muted-foreground">Proficiency</span>
-                <span className="font-bold text-foreground">{skill.level}%</span>
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>Proficiency</span>
+                <span className="font-medium">{level}%</span>
               </div>
-              <div className="h-2 bg-muted rounded-full overflow-hidden">
+
+              <div className="h-3 bg-muted rounded-full overflow-hidden">
                 <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${skill.level}%` }}
-                  transition={{ duration: 1, ease: "easeOut" }}
+                  layout
                   className={cn(
-                    "h-full bg-linear-to-r rounded-full transition-all duration-700",
-                    getProficiencyColor(skill.level)
+                    "h-full bg-linear-to-r",
+                    getProficiencyColor(level)
                   )}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${level}%` }}
+                  transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
                 />
               </div>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-muted/50 rounded-lg p-3 text-center border border-primary/10 group-hover:bg-muted/70 transition">
-                <p className="text-xs text-muted-foreground font-medium">Projects</p>
-                <p className="text-lg font-bold text-foreground mt-1">{skill.projects}</p>
+            {/* METRIC GRID — PERFECTLY ALIGNED (Option A) */}
+            <div className="grid grid-cols-3 gap-3">
+              {/* Consistency */}
+              <div className="bg-muted/60 border border-primary/10 rounded-lg p-3 flex flex-col items-center justify-center h-[94px]">
+                <p className="text-xs text-muted-foreground leading-none">
+                  Consistency
+                </p>
+
+                <div className="flex items-center justify-center mt-2 h-5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <StarIcon
+                      key={i}
+                      className={cn(
+                        "w-4 h-4",
+                        i < consistency
+                          ? "text-amber-500 fill-amber-500"
+                          : "text-muted-foreground/30"
+                      )}
+                    />
+                  ))}
+                </div>
+
+                <p className="text-xs font-medium mt-1 leading-none">
+                  {consistency}/5
+                </p>
               </div>
-              <div className="bg-muted/50 rounded-lg p-3 text-center border border-primary/10 group-hover:bg-muted/70 transition">
-                <p className="text-xs text-muted-foreground font-medium">Certifications</p>
-                <p className="text-lg font-bold text-foreground mt-1">{certifications}</p>
+
+              {/* Usage */}
+              <div className="bg-muted/60 border border-primary/10 rounded-lg p-3 flex flex-col items-center justify-center h-[94px]">
+                <p className="text-xs text-muted-foreground leading-none">
+                  Usage
+                </p>
+
+                <p className="text-base font-bold mt-2 leading-none">
+                  {skill.usage ?? "Medium"}
+                </p>
+              </div>
+
+              {/* Confidence */}
+              <div className="bg-muted/60 border border-primary/10 rounded-lg p-3 flex flex-col items-center justify-center h-[94px]">
+                <p className="text-xs text-muted-foreground leading-none">
+                  Confidence
+                </p>
+
+                <p className="text-base font-bold mt-2 leading-none">
+                  {skill.confidence ?? "Medium"}
+                </p>
               </div>
             </div>
 
-            {/* Category */}
+            {/* Category Badge */}
             <Badge
               variant="outline"
-              className={cn(
-                "w-full justify-center border-primary/30 text-primary",
-                getCategoryColor(skill.category)
-              )}
+              className="w-full justify-center border-primary/30"
             >
-              {category?.icon && <category.icon className="w-3 h-3 mr-1" aria-hidden="true" />}
-              {category?.title || skill.category}
+              {category?.title ?? skill.category}
             </Badge>
           </CardContent>
         </Card>

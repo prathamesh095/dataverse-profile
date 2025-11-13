@@ -192,7 +192,7 @@ export function HeroSection(): JSX.Element {
   return (
     <>
       <section
-        className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden"
         style={{
           background:
             "linear-gradient(to bottom right, var(--color-primary)/5, transparent, var(--color-accent)/5)",
@@ -343,11 +343,7 @@ export function HeroSection(): JSX.Element {
 /* ===========================================
    ⚙️ SUBCOMPONENTS
    =========================================== */
-const StatCounter = React.memo(function StatCounter({
-  end,
-  label,
-  icon: Icon,
-}: {
+const StatCounter = React.memo(function StatCounter({ end, label, icon: Icon }: {
   end: number;
   label: string;
   icon: LucideIcon;

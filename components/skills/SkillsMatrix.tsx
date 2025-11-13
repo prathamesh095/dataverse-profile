@@ -1,7 +1,8 @@
+// components/skills/SkillsMatrix.tsx
 "use client";
 
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, easeOut, easeIn } from "framer-motion";
 import { StatsCard } from "./StatsCard";
 import { SkillCard } from "./SkillCard";
 import { SkillListRow } from "./SkillListRow";
@@ -14,180 +15,217 @@ import type { Skill, SkillCategory } from "@/lib/skills";
 import { Zap, TrendingUp, Award, Filter } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// --------------------------------------------------
-// Type Extensions
-// --------------------------------------------------
+/* ---------------------------------------------------
+   Extended Skill Type
+--------------------------------------------------- */
 type ExtendedSkill = Skill & {
   category: string;
-  certifications?: number;
-  tags?: string[];
-  description?: string;
-  technologies?: string[];
+  consistency?: number;
+  usage?: "High" | "Medium" | "Low";
+  confidence?: "Strong" | "Medium" | "Basic";
 };
 
-// --------------------------------------------------
-// Component: SkillsMatrix
-// --------------------------------------------------
+/* ---------------------------------------------------
+   Animation Variants (Type-Safe with Framer Motion v10+)
+--------------------------------------------------- */
+const itemVariants = {
+  initial: { opacity: 0, y: 18 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.35, ease: easeOut },
+  },
+  exit: {
+    opacity: 0,
+    y: -12,
+    transition: { duration: 0.25, ease: easeIn },
+  },
+};
+
+const headerVariants = {
+  initial: { opacity: 0, y: -20 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: easeOut },
+  },
+};
+
+/* ---------------------------------------------------
+   Component: SkillsMatrix
+--------------------------------------------------- */
 export function SkillsMatrix() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [sortBy, setSortBy] = useState<"level" | "projects" | "certifications">("level");
+  const [sortBy, setSortBy] = useState<"level" | "consistency" | "confidence" | "usage">("level");
   const [maxSkills, setMaxSkills] = useState(12);
-  const [viewMode, setViewMode] = useLocalStorage<"grid" | "list">("skills:viewMode", "grid");
+  const [viewMode, setViewMode] = useLocalStorage<"grid" | "list">(
+    "skills:viewMode",
+    "grid"
+  );
 
   const debouncedSearch = useDebounce(searchQuery, 250);
 
-  // SSR-safe category loading
   const skillCategories: SkillCategory[] =
     typeof window !== "undefined"
       ? require("@/lib/skills").skillCategories
       : _skillCategories;
 
-  // Flatten categories → skills
+  /* ---------------------------------------------------
+     Merge categories -> skills
+  --------------------------------------------------- */
   const allSkillsWithCategory = useMemo(() => {
-    return skillCategories.flatMap((cat: SkillCategory) =>
-      (cat.skills || []).map(
-        (s: Skill) => ({ ...s, category: cat.id } as ExtendedSkill)
+    return skillCategories.flatMap((cat) =>
+      cat.skills.map(
+        (s) =>
+          ({
+            ...s,
+            category: cat.id,
+            consistency: (s as any).consistency ?? 3,
+            usage: (s as any).usage ?? "Medium",
+            confidence: (s as any).confidence ?? "Medium",
+          } as ExtendedSkill)
       )
     );
   }, [skillCategories]);
 
-  if (!allSkillsWithCategory.length) {
+  if (!allSkillsWithCategory.length)
     return (
-      <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <p className="text-muted-foreground" role="alert">
-            No skills available. Please check the data source.
-          </p>
-        </div>
+      <div className="py-20 text-center text-muted-foreground">
+        No skills found.
       </div>
     );
-  }
 
-  // --------------------------------------------------
-  // Fuzzy Search Setup (Fuse.js)
-  // --------------------------------------------------
+  /* ---------------------------------------------------
+     Fuse Search Setup
+  --------------------------------------------------- */
   const fuseDocs = useMemo(
     () =>
       allSkillsWithCategory.map((s) => ({
         title: s.name,
-        keywords: [
-          s.tags?.join(" ") || "",
-          s.description || "",
-          s.technologies?.join(" ") || "",
-        ],
+        keywords: [],
         ref: s,
       })),
     [allSkillsWithCategory]
   );
 
   const { search: fuseSearch } = useFuseSearch(fuseDocs, {
-    keys: ["title", "keywords"],
-    threshold: 0.35,
+    keys: ["title"],
+    threshold: 0.32,
   });
 
-  // --------------------------------------------------
-  // Stats + Filtering
-  // --------------------------------------------------
+  /* ---------------------------------------------------
+     Stats-filtered list
+  --------------------------------------------------- */
   const filteredForStats = useMemo(() => {
-    const base =
+    let base =
       selectedCategory === "all"
         ? allSkillsWithCategory
         : allSkillsWithCategory.filter((s) => s.category === selectedCategory);
 
     if (!debouncedSearch) return base;
 
-    const results = fuseSearch(debouncedSearch);
-    const refs = results.map((r: any) => r.ref).filter(Boolean) as ExtendedSkill[];
-    return base.filter((s) => refs.some((r) => r.name === s.name));
-  }, [allSkillsWithCategory, selectedCategory, debouncedSearch, fuseSearch]);
+    const matches = fuseSearch(debouncedSearch).map((r: any) => r.ref.name);
+    return base.filter((s) => matches.includes(s.name));
+  }, [selectedCategory, debouncedSearch, fuseSearch, allSkillsWithCategory]);
 
+  /* ---------------------------------------------------
+     Stats
+  --------------------------------------------------- */
   const stats = useMemo(() => {
-    const skills = filteredForStats;
-    const avgLevel = skills.length
-      ? Math.round(skills.reduce((s, a) => s + a.level, 0) / skills.length)
+    const list = filteredForStats;
+
+    const avgLevel = list.length
+      ? Math.round(list.reduce((a, b) => a + b.level, 0) / list.length)
       : 0;
-    const totalProjects = skills.reduce((s, a) => s + (a.projects || 0), 0);
-    const totalCertifications = skills.reduce(
-      (s, a) => s + (a.certifications || 0),
-      0
-    );
-    const expertSkills = skills.filter((s) => s.level >= 90).length;
-    const totalSkills =
+
+    const avgConsistency = list.length
+      ? (
+          list.reduce((a, b) => a + (b.consistency ?? 0), 0) / list.length
+        ).toFixed(2)
+      : "0";
+
+    const strongConfidence = list.filter((s) => s.confidence === "Strong").length;
+
+    const total =
       selectedCategory === "all"
         ? allSkillsWithCategory.length
-        : allSkillsWithCategory.filter((s) => s.category === selectedCategory)
-            .length;
+        : allSkillsWithCategory.filter((s) => s.category === selectedCategory).length;
 
     return {
       avgLevel,
-      totalProjects,
-      totalCertifications,
-      expertSkills,
-      totalSkills,
-      displayedSkills: skills.length,
+      avgConsistency,
+      strongConfidence,
+      totalSkills: total,
+      displayedSkills: list.length,
     };
   }, [filteredForStats, selectedCategory, allSkillsWithCategory]);
 
+  /* ---------------------------------------------------
+     Final filtered + sorted results
+  --------------------------------------------------- */
   const filteredSkills = useMemo(() => {
-    let set =
+    let list =
       selectedCategory === "all"
-        ? allSkillsWithCategory.slice()
+        ? [...allSkillsWithCategory]
         : allSkillsWithCategory.filter((s) => s.category === selectedCategory);
 
     if (debouncedSearch) {
-      const results = fuseSearch(debouncedSearch);
-      const refs = results.map((r: any) => r.ref).filter(Boolean) as ExtendedSkill[];
-      const names = new Set(refs.map((r) => r.name));
-      set = set.filter((s) => names.has(s.name));
+      const matches = fuseSearch(debouncedSearch).map((r: any) => r.ref.name);
+      list = list.filter((s) => matches.includes(s.name));
     }
 
-    set.sort((a, b) => {
-      switch (sortBy) {
-        case "projects":
-          return (b.projects || 0) - (a.projects || 0);
-        case "certifications":
-          return (b.certifications || 0) - (a.certifications || 0);
-        case "level":
-        default:
-          return b.level - a.level;
+    list.sort((a, b) => {
+      if (sortBy === "level") return b.level - a.level;
+      if (sortBy === "consistency")
+        return (b.consistency ?? 0) - (a.consistency ?? 0);
+
+      if (sortBy === "confidence") {
+        const rank = (v: string | undefined) =>
+          v === "Strong" ? 3 : v === "Medium" ? 2 : 1;
+        return rank(b.confidence) - rank(a.confidence);
       }
+
+      if (sortBy === "usage") {
+        const ur = (v: string | undefined) =>
+          v === "High" ? 3 : v === "Medium" ? 2 : 1;
+        return ur(b.usage) - ur(a.usage);
+      }
+
+      return 0;
     });
 
-    return set.slice(0, maxSkills);
+    return list.slice(0, maxSkills);
   }, [
     allSkillsWithCategory,
     selectedCategory,
     debouncedSearch,
+    fuseSearch,
     sortBy,
     maxSkills,
-    fuseSearch,
   ]);
 
-  // --------------------------------------------------
-  // Responsive max skills via ResizeObserver
-  // --------------------------------------------------
+  /* ---------------------------------------------------
+     Responsive max-skill count
+  --------------------------------------------------- */
   useEffect(() => {
-    if (typeof window === "undefined" || typeof ResizeObserver === "undefined") {
-      setMaxSkills(12);
-      return;
-    }
     const ro = new ResizeObserver((entries) => {
-      const w = entries[0]?.contentRect.width || window.innerWidth;
-      setMaxSkills(w >= 1200 ? 12 : w >= 900 ? 9 : w >= 640 ? 8 : 6);
+      const w = entries[0].contentRect.width;
+      setMaxSkills(w >= 1300 ? 12 : w >= 1000 ? 9 : w >= 700 ? 6 : 4);
     });
+
     ro.observe(document.body);
     return () => ro.disconnect();
   }, []);
 
-  // --------------------------------------------------
-  // Helpers
-  // --------------------------------------------------
+  /* ---------------------------------------------------
+     Helpers
+  --------------------------------------------------- */
   const getProficiencyColor = useCallback((level: number) => {
-    if (level >= 90) return "from-primary to-secondary";
-    if (level >= 80) return "from-status-info to-secondary";
-    if (level >= 70) return "from-secondary to-tertiary";
-    return "from-tertiary to-status-warning";
+    if (level >= 90) return "bg-gradient-to-r from-primary to-secondary";
+    if (level >= 80) return "bg-gradient-to-r from-status-info to-secondary";
+    if (level >= 70) return "bg-gradient-to-r from-secondary to-tertiary";
+    return "bg-gradient-to-r from-tertiary to-status-warning";
   }, []);
 
   const getProficiencyLabel = useCallback((level: number) => {
@@ -197,194 +235,148 @@ export function SkillsMatrix() {
     return "Beginner";
   }, []);
 
-  const getCategoryColor = useCallback(
-    () => "bg-linear-to-r from-primary/10 to-secondary/10",
-    []
-  );
-
-  // --------------------------------------------------
-  // Render
-  // --------------------------------------------------
+  /* ---------------------------------------------------
+     RENDER
+  --------------------------------------------------- */
   return (
-    <div
-      className="min-h-screen py-12 px-4 sm:px-6 lg:px-8"
-      role="main"
-      aria-label="Skills Matrix"
-    >
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-12">
-        {/* Header */}
-        <motion.section
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center space-y-4"
+
+        {/* HEADER */}
+        <motion.header
+          variants={headerVariants}
+          initial="initial"
+          animate="animate"
+          className="space-y-4 text-center"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
-            <Zap className="w-4 h-4 text-primary" aria-hidden />
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mx-auto">
+            <Zap className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-primary">
               Professional Skills
             </span>
           </div>
+
           <h1 className="text-4xl md:text-5xl font-bold text-foreground">
             Technical Skills Matrix
           </h1>
+
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Comprehensive overview of expertise across multiple domains with
-            proficiency levels, project experience, and professional
-            certifications.
+            Strength dashboard focused on consistency, usage, and confidence — project-free.
           </p>
-        </motion.section>
 
-        {/* Stats */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
-          aria-label="Skills Statistics"
-        >
-          <StatsCard
-            label="Avg Proficiency"
-            value={`${stats.avgLevel}%`}
-            icon={TrendingUp}
-          />
-          <StatsCard
-            label="Total Projects"
-            value={stats.totalProjects}
-            icon={Award}
-          />
-          <StatsCard
-            label="Expert Skills"
-            value={stats.expertSkills}
-            icon={Zap}
-          />
-          <StatsCard
-            label="Skills Displayed"
-            value={stats.displayedSkills}
-            icon={Filter}
-          />
-        </motion.section>
+          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground mt-2">
+            <span>
+              Total skills{" "}
+              <span className="font-semibold text-foreground">
+                {allSkillsWithCategory.length}
+              </span>
+            </span>
 
-        {/* Filters + Skills */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="space-y-6"
-          aria-labelledby="skills-controls-heading"
-        >
-          <header className="space-y-2" id="skills-controls-heading">
-            <div className="flex items-center gap-3">
-              <div
-                className={cn(
-                  "w-12 h-12 rounded-lg bg-linear-to-br flex items-center justify-center shrink-0",
-                  "bg-linear-to-r from-primary to-secondary"
-                )}
-              >
-                <Filter className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-foreground">
-                  {selectedCategory === "all"
-                    ? "All Skills"
-                    : skillCategories.find((c) => c.id === selectedCategory)
-                        ?.title ?? selectedCategory}
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  {selectedCategory === "all"
-                    ? "Comprehensive view of all technical expertise across all domains"
-                    : skillCategories.find((c) => c.id === selectedCategory)
-                        ?.description ?? ""}
-                </p>
-              </div>
-            </div>
-          </header>
+            <div className="w-px h-4 bg-border" />
 
-          <Controls
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-            allSkillsWithCategory={allSkillsWithCategory}
-            skillCategories={skillCategories}
-            viewMode={viewMode}
-            setViewMode={setViewMode}
-          />
-
-          <div
-            className={cn(
-              viewMode === "grid"
-                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                : "space-y-6"
-            )}
-            role="list"
-            aria-label="Skills list"
-          >
-            <AnimatePresence mode="popLayout">
-              {filteredSkills.length > 0 ? (
-                filteredSkills.map((skill, idx) =>
-                  viewMode === "grid" ? (
-                    <SkillCard
-                      key={`${skill.name}-${idx}`}
-                      skill={skill}
-                      getProficiencyColor={getProficiencyColor}
-                      getProficiencyLabel={getProficiencyLabel}
-                      getCategoryColor={getCategoryColor}
-                    />
-                  ) : (
-                    <SkillListRow
-                      key={`${skill.name}-${idx}`}
-                      skill={skill}
-                      getProficiencyLabel={getProficiencyLabel}
-                    />
-                  )
-                )
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="col-span-full text-center py-12"
-                  role="status"
-                  aria-live="polite"
-                >
-                  <p className="text-muted-foreground">
-                    No skills found matching your search. Try adjusting filters.
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <span>
+              Showing{" "}
+              <span className="font-semibold text-primary">
+                {filteredSkills.length}
+              </span>
+            </span>
           </div>
-        </motion.section>
+        </motion.header>
 
-        {/* Footer Summary */}
-        <motion.footer
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="border-t border-primary/20 pt-8 text-center"
-        >
-          <p className="text-sm text-muted-foreground" aria-label="Skills summary">
-            Total Skills:{" "}
+        {/* STATS */}
+        <section>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatsCard label="Avg Proficiency" value={`${stats.avgLevel}%`} icon={TrendingUp} />
+            <StatsCard label="Avg Consistency" value={stats.avgConsistency} icon={Zap} />
+            <StatsCard label="Strong Confidence" value={stats.strongConfidence.toString()} icon={Award} />
+            <StatsCard label="Skills Displayed" value={stats.displayedSkills.toString()} icon={Filter} />
+          </div>
+        </section>
+
+        {/* CONTROLS */}
+        <Controls
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
+          allSkillsWithCategory={allSkillsWithCategory}
+          skillCategories={skillCategories}
+        />
+
+        {/* EMPTY STATE */}
+        {filteredSkills.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mt-8 text-center text-muted-foreground border border-primary/10 bg-muted/40 p-8 rounded-lg"
+          >
+            <p className="text-lg">No skills found. Try adjusting your filters.</p>
+          </motion.div>
+        )}
+
+        {/* GRID / LIST VIEW */}
+        <AnimatePresence mode="popLayout">
+          {viewMode === "grid" ? (
+            <motion.div
+              layout
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              {filteredSkills.map((skill, index) => (
+                <motion.div
+                  key={`${skill.name}-${skill.category}-${index}`}
+                  layout
+                  variants={itemVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="h-full"
+                >
+                  <SkillCard
+                    skill={skill}
+                    getProficiencyColor={getProficiencyColor}
+                    getProficiencyLabel={getProficiencyLabel}
+                    getCategoryColor={() => "text-primary"}
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div layout className="space-y-4">
+              {filteredSkills.map((skill, index) => (
+                <motion.div
+                  key={`${skill.name}-${skill.category}-${index}`}
+                  layout
+                  variants={itemVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                >
+                  <SkillListRow
+                    skill={skill}
+                    getProficiencyLabel={getProficiencyLabel}
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* FOOTER */}
+        <footer className="border-t pt-8 text-center border-primary/10">
+          <p className="text-sm text-muted-foreground">
+            Showing{" "}
+            <span className="font-bold text-primary">{filteredSkills.length}</span>{" "}
+            of{" "}
             <span className="font-bold text-foreground">
-              {allSkillsWithCategory.length}
+              {stats.totalSkills}
             </span>{" "}
-            • Categories:{" "}
-            <span className="font-bold text-foreground">
-              {skillCategories.length}
-            </span>{" "}
-            • Showing:{" "}
-            <span className="font-bold text-primary">
-              {filteredSkills.length}
-            </span>{" "}
-            of {stats.totalSkills}
+            Skills
           </p>
-        </motion.footer>
+        </footer>
       </div>
     </div>
   );

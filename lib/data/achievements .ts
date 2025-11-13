@@ -4,10 +4,10 @@ import { Trophy, Award, BookOpen, Users, LucideIcon, Zap } from "lucide-react"
 
 // Define and EXPORT the icon map for use in the component
 export const AchievementIcons: { [key: string]: LucideIcon } = {
-  Hackathons: Zap, // Using Zap (lightning)
-  Competitions: Trophy, // Using Trophy
-  Leadership: Users, // Using Users
-  Certifications: BookOpen, // Using BookOpen
+  Hackathons: Zap, // Represents innovation and rapid problem-solving
+  Competitions: Trophy, // Represents ranking and excellence
+  Leadership: Users, // Represents team leadership
+  Certifications: BookOpen, // Represents learning and mastery
 }
 
 export interface Achievement {
@@ -22,66 +22,47 @@ export interface Achievement {
 export const achievements: Achievement[] = [
   {
     id: 1,
-    title: "TATA Crucible Hackathon Winner",
-    description: "Secured 1st place in the national TATA Crucible Hackathon for innovative data analytics solution.",
+    title: "TATA Crucible Hackathon",
+    description:
+      "Successfully cleared the first two rounds of the TATA Crucible Hackathon, demonstrating strong analytical and problem-solving abilities.",
     category: "Hackathons",
-    year: "2023",
-    tags: "Data Analytics, Innovation"
+    year: "2025",
+    tags: "Data Analytics, Innovation",
   },
   {
     id: 2,
     title: "Smart India Hackathon",
-    description: "Led team to victory in Smart India Hackathon with a predictive maintenance model.",
+    description:
+      "Successfully qualified at the college level for the Smart India Hackathon, contributing to solution development on real-world problem statements.",
     category: "Hackathons",
-    year: "2022",
-    tags: "Machine Learning, Teamwork"
+    year: "2024",
+    tags: "Machine Learning, Teamwork",
   },
   {
     id: 3,
-    title: "Data Science Quiz Champion",
-    description: "Won 1st place in a national data science quiz contest organized by IEEE.",
+    title: "AIR 126 in Data Science Quiz by Naukri.com",
+    description:
+      "Achieved an All India Rank of 126 in the Naukri.com Data Science Quiz, showcasing strong fundamentals in analytics and statistical reasoning.",
     category: "Competitions",
-    year: "2021",
-    tags: "Statistics, Data Science"
-  },
-  {
-    id: 4,
-    title: "Case Study Competition",
-    description: "Ranked in top 5 in a business analytics case study competition by IIM Bangalore.",
-    category: "Competitions",
-    year: "2022",
-    tags: "Business Analytics, Problem Solving"
-  },
-  {
-    id: 5,
-    title: "Data Science Club President",
-    description: "Led the university's Data Science Club, organizing 10+ workshops and events.",
-    category: "Leadership",
-    year: "2023",
-    tags: "Leadership, Event Management"
+    year: "2025",
+    tags: "Statistics, Data Science",
   },
   {
     id: 6,
     title: "Tech Fest Coordinator",
-    description: "Coordinated annual tech fest, managing a team of 20+ volunteers.",
+    description:
+      "Coordinated the annual college tech fest, leading a team of 20+ volunteers and ensuring seamless event execution.",
     category: "Leadership",
-    year: "2022",
-    tags: "Team Management, Organization"
+    year: "2023",
+    tags: "Team Management, Organization",
   },
   {
     id: 7,
     title: "AI/ML Specialization",
-    description: "Completed advanced AI/ML specialization from Stanford Online.",
+    description:
+      "Completed a structured specialization program in Artificial Intelligence and Machine Learning, gaining hands-on experience in modern ML techniques.",
     category: "Certifications",
-    year: "2020",
-    tags: "Deep Learning, Neural Networks"
+    year: "2024",
+    tags: "Deep Learning, Neural Networks",
   },
-  {
-    id: 8,
-    title: "AWS Certified Data Analytics",
-    description: "Earned AWS Certified Data Analytics Specialty certification.",
-    category: "Certifications",
-    year: "2021",
-    tags: "Cloud Computing, Data Engineering"
-  }
 ]
