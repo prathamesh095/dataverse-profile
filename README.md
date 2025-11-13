@@ -1,390 +1,266 @@
-# 🏆 Executive Data Portfolio — Next-Gen Personal Branding Platform  
-**Author:** Prathamesh Sanjay Pawar  
-**Live Website:** https://v0-executive-data-portfolio.vercel.app/  
-**Tech Stack:** Next.js • React • TypeScript • TailwindCSS • Vercel • MDX • Framer Motion  
+🏆 Executive Data Portfolio — Next-Gen Personal Branding Platform
 
-A fully-featured, production-grade data portfolio showcasing capabilities in:  
-**Data Analytics, Machine Learning, BI, Automation, Statistics, and Modern Data Systems.**
+Author: Prathamesh Sanjay Pawar
+Live Website: (Insert Deployed URL Here)
+Tech Stack: Next.js • React • TypeScript • TailwindCSS • Framer Motion
 
-This README follows premium engineering documentation standards.
+✨ Project Health & Metrics
 
+Metric
 
----
+Value
 
-# 📚 Table of Contents  
-- [🎯 Executive Summary](#-executive-summary)  
-- [🧩 System Architecture](#-system-architecture)  
-- [🗂 Directory Structure](#-directory-structure)  
-- [📦 Technology Stack](#-technology-stack)  
-- [🛠 Local Development](#-local-development)  
-- [🚀 Production Build & Deployment](#-production-build--deployment)  
-- [📊 Data Modeling & Content Strategy](#-data-modeling--content-strategy)  
-- [🎨 Design System](#-design-system)  
-- [📈 Performance & Web Vitals](#-performance--web-vitals)  
-- [🔐 Security Guidelines](#-security-guidelines)  
-- [🌐 SEO & Discoverability](#-seo--discoverability)  
-- [♿ Accessibility (WCAG 2.1 AA)](#-accessibility-wcag-21-aa)  
-- [📡 Observability: Logs, Metrics & Monitoring](#-observability-logs-metrics--monitoring)  
-- [🧪 Testing Strategy](#-testing-strategy)  
-- [🤖 CI/CD Pipeline](#-cicd-pipeline)  
-- [📁 Content Authoring Workflow](#-content-authoring-workflow)  
-- [🧭 Roadmap](#-roadmap)  
-- [📄 License](#-license)  
-- [🔗 References](#-references)
+Reference
 
+Total Projects
 
----
+5
 
-# 🎯 Executive Summary  
-This repository powers **Prathamesh Pawar’s Executive Data Portfolio**, engineered to operate as a **high-performance digital identity** for analytics, data science, artificial intelligence, business intelligence, and automation consultancy.
+lib/types.ts
 
-**The mission:**  
-> Transform complex data challenges into business-ready insights through narrative storytelling, statistical depth, and modern web engineering.
+Unique Technologies
 
-### The portfolio includes:
-- Executive hero section with title, stats & CTA  
-- Skill matrix with technology grouping  
-- Complete project gallery with metadata  
-- Blog/Insight pages authored in MDX  
-- Contact workflow & structured schema metadata  
-- Responsive, SEO-optimized UI with performance-first architecture  
+13+
 
+lib/types.ts
 
----
+Data Sources Used
 
-# 🧩 System Architecture  
+5+
 
-High-level architectural overview:
+lib/types.ts
 
-                         ┌───────────────────────────┐
-                         │       User Browser         │
-                         └──────────────┬────────────┘
-                                        │
-                               HTTPS Requests
-                                        │
-                  ┌─────────────────────▼─────────────────────┐
-                  │                Next.js                     │
-                  │  SSR • SSG • ISR • Routing • Image Opt.   │
-                  └───┬──────────────────────────────────────┬──┘
-                      │                                      │
-           Static Content (MDX/JSON)                 UI Components (React)
-                      │                                      │
-      ┌───────────────▼──────────────┐          ┌───────────▼──────────────┐
-      │  Content Layer (MDX Parser)   │          │  Design System (Tailwind) │
-      └───────────────┬──────────────┘          └───────────┬──────────────┘
-                      │                                      │
-               ┌──────▼───────┐                    ┌────────▼─────────┐
-               │   Build Tools │                    │  Framer Motion   │
-               └──────┬────────┘                    └──────────────────┘
-                      │
-          Deployment + CDN + Functions
-                      │
-               ┌──────▼────────┐
-               │     Vercel     │
-               └────────────────┘
+Framework
 
+Next.js 14
 
----
+package.json
 
-# 🗂 Directory Structure  
+Styling Engine
 
-/
-├── app/
-│ ├── page.tsx
-│ ├── layout.tsx
-│ ├── projects/
-│ │ └── [slug]/page.tsx
-│ ├── blog/
-│ │ └── [slug]/page.tsx
-│ └── api/
-│ └── contact/route.ts
-│
-├── components/
-│ ├── ui/
-│ ├── layout/
-│ ├── home/
-│ ├── skills/
-│ ├── projects/
-│ └── shared/
-│
-├── content/
-│ ├── projects/.md
-│ ├── blog/.md
-│ └── skills.json
-│
-├── public/
-│
-├── styles/
-│ ├── globals.css
-│ └── tokens.css
-│
-└── README.md
+TailwindCSS 4.x
 
+tailwind.config.ts
 
+Key Performance Metric
 
+LCP & FID Monitored
 
----
+performance-monitor.tsx
 
-# 📦 Technology Stack  
+📚 Table of Contents
 
-### **Frontend Framework**
-- Next.js — SSR/SSG/ISR, routing, optimizations  
-  **Ref:** https://nextjs.org/docs  
+🎯 Executive Summary
 
-### **UI Layer**
-- React 18 — modern component patterns  
-  **Ref:** https://react.dev  
+🚀 Key Features
 
-- TailwindCSS — utility-first styling  
-  **Ref:** https://tailwindcss.com  
+1. Executive Hero Section
 
-- Framer Motion — UI animation engine  
-  **Ref:** https://www.framer.com/motion/  
+2. Skills Matrix with Custom Metrics
 
-### **Content Layer**
-- MDX (Markdown + JSX for content-driven pages)
+3. Global Command-Palette Search
 
-### **Deployment**
-- Vercel — CDN, edge caching, SSR infra  
-  **Ref:** https://vercel.com/docs  
+4. Structured Project Showcase
 
+🧩 System Architecture
 
----
-
-# 🛠 Local Development  
-
-Clone:
-
-```bash
-git clone https://github.com/<repo>/executive-portfolio.git
-cd executive-portfolio
-cd executive-portfolio
-Install:
-
-bash
-Copy code
-npm install
-Start dev server:
-
-bash
-Copy code
-npm run dev
-Visit:
-
-arduino
-Copy code
-http://localhost:3000
-🚀 Production Build & Deployment
-Build:
-
-bash
-Copy code
-npm run build
-Start production preview:
-
-bash
-Copy code
-npm start
-Deploy to Vercel:
-
-bash
-Copy code
-vercel --prod
 📊 Data Modeling & Content Strategy
-Project Metadata Schema
-Every project uses a structured frontmatter:
 
-json
-Copy code
-{
-  "title": "Newspaper Survival Forecasting",
-  "category": "Machine Learning",
-  "metrics": ["20% YoY Print Decline", "Forecast: 5 Years"],
-  "tech": ["Python", "Prophet", "Pandas"],
-  "thumbnail": "/projects/newspaper.png",
-  "slug": "newspaper-survival-forecasting"
+📈 Performance & Observability
+
+🛠 Development & Deployment
+
+🎯 Executive Summary
+
+This repository powers Prathamesh Pawar’s Executive Data Portfolio, architected as a high-performance, production-ready digital identity for consultancy and career progression. It is built to showcase a balanced discipline across engineering rigor, statistical depth, and modern machine learning practices.
+
+The core objective is to move beyond static, bullet-point resumes by offering live, interactive case studies that tie complex data methodologies directly to quantifiable business impact.
+
+Core Competencies Highlighted:
+
+Business Intelligence: Crafting high-impact dashboards (Power BI, Tableau).
+
+Data Analytics: Deep dives into market trends and strategic opportunities.
+
+Machine Learning: Model design, feature engineering, and predictive systems.
+
+Data Engineering: Designing scalable data schemas and ETL processes (SQL, Databricks, AWS concepts).
+
+🚀 Key Features
+
+The platform is designed around specific components to maximize user engagement and showcase technical depth:
+
+1. Executive Hero Section
+
+Role Typewriter: Dynamically cycles through professional roles (Data Analyst, Data Scientist, ML Engineer) using a custom useTypewriter hook for engaging, high-impact branding [cite: hero-section.tsx].
+
+Animated Counters: Displays projects, technologies, and career milestones using an Intersection Observer-based animation for a premium, measurable experience [cite: animated-counter.tsx].
+
+2. Skills Matrix with Custom Metrics
+
+Granular Assessment: The SkillsMatrix component visualizes skills not just by Proficiency Level (0-100), but also by Consistency, Usage, and Confidence for a transparent, nuanced view of technical expertise [cite: skills/SkillsMatrix.tsx, lib/skills.ts].
+
+Interactive Filtering: Allows users to filter skills by Category and sort by any of the four metrics, enhancing discoverability [cite: components/skills/Controls.tsx].
+
+3. Global Command-Palette Search
+
+fuse.js Integration: Provides fast, fuzzy-matching search capability across the entire portfolio (projects, skills, blogs) for rapid content access [cite: components/navigation.tsx, hooks/useFuseSearch.ts].
+
+Command Support: Supports utility commands (e.g., /resume, /projects, /achievements) directly from the search bar, creating a power-user experience [cite: components/navigation.tsx].
+
+4. Structured Project Showcase
+
+Project Details: Each project features a dedicated case study page with sections for Overview, Tech Stack, Features, Process Flow, Metrics, Learnings, and Gallery [cite: app/projects/[id]/page.tsx, components/project-details/index.tsx].
+
+Quick Preview: Project cards include a Preview button to launch a client-side modal showcasing core details without a full page navigation reload [cite: components/projects/preview/ProjectPreviewDialog.tsx].
+
+🧩 System Architecture
+
+The project is built on a modern, performance-centric stack focused on maintainability and speed.
+
+Component
+
+Technology / Source
+
+Description
+
+Frontend Core
+
+Next.js 14, React 18, TypeScript
+
+Robust, type-safe development environment. Utilizes output: 'export' for maximum performance via Static Site Generation (SSG) [cite: next.config.mjs].
+
+Motion/UX
+
+Framer Motion, cubic-bezier(0.22, 1, 0.36, 1)
+
+Ensures smooth, non-janky transitions across all scroll and hover interactions, adhering to a defined motion aesthetic [cite: lib/motion.ts, app/globals.css].
+
+Content Layer
+
+Structured JSON/TS files (lib/*)
+
+Content is decoupled from the UI, making updates predictable and enabling programmatic generation of project pages and API responses.
+
+UI Kit
+
+Shadcn/ui & Custom Components
+
+Utilizes functional, accessible components styled exclusively with TailwindCSS for rapid, consistent UI development.
+
+Global State
+
+useLocalStorage & useState
+
+Lightweight, client-side state management for user preferences (view mode, dark mode) and control inputs [cite: hooks/useLocalStorage.ts].
+
+📊 Data Modeling & Content Strategy
+
+Content integrity is guaranteed by TypeScript interfaces, forming a robust Content-as-Data architecture.
+
+Project Data Model (lib/types.ts)
+
+The Project interface is central, emphasizing business impact:
+
+export interface Project {
+  // ... metadata
+  category: string;
+  domain: string;
+  metrics: Record<string, string>; // Quantifiable outcomes (e.g., "retention90Hotstar": "5.13%")
+  process: ProcessStep[];          // Step-by-step methodology
+  keyLearnings: string[];
+  // ... more fields
 }
-Blog Metadata Schema
-md
-Copy code
----
-title: "Why FMCG Remains Stable in Inflation"
-date: "2024-02-10"
-tags: ["fmcg", "inflation", "analytics"]
-summary: "Economic insights behind consumer behaviour resilience."
----
-🎨 Design System
-Guiding Principles
-Tokenized design
 
-Accessible typography
 
-Motion as meaning
+Skill Data Model (lib/skills.ts)
 
-Consistent spacing + scale
+The Skill interface captures granular metrics for a holistic professional profile:
 
-Sample Design Tokens
-css
-Copy code
-:root {
-  --background: #F9FAFB;
-  --foreground: #0F172A;
-  --accent: #2563EB;
-  --radius-lg: 24px;
-}
-📈 Performance & Web Vitals
-Optimized for Core Web Vitals:
+Metric
 
-Largest Contentful Paint (LCP)
+Purpose
 
-First Input Delay
+level
 
-CLS (Cumulative Layout Shift)
+Standard Proficiency (0-100)
 
-Image lazy loading
+consistency
 
-Route-based code splitting
+Frequency of use (0-5 stars)
 
-References:
+usage
 
-https://web.dev/vitals/
+Contextual application level (High, Medium, Low)
 
-https://developer.mozilla.org/en-US/docs/Web/Performance
+confidence
 
-🔐 Security Guidelines
-No client-side secrets
+Self-assessed mastery (Strong, Medium, Basic)
 
-Secure headers via Vercel config
+📈 Performance & Observability
 
-Markdown sanitization to avoid XSS
+Performance Measures
 
-Strict API schema validation
+Focus Area
 
-Ref: https://developer.mozilla.org/en-US/docs/Web/Security
+Mitigation / Tool
 
-🌐 SEO & Discoverability
-Implemented SEO Features:
-Next.js Metadata API
+File Reference
 
-Canonical URLs
+Core Web Vitals
 
-OpenGraph (OG) images
+PerformanceObserver API tracking LCP & FID
 
-Structured Data (JSON-LD)
+performance-monitor.tsx
 
-robots.txt + sitemap.xml
+Image Loading
 
-Semantic HTML
+Priority setting, lazy loading, and custom skeleton fallbacks
 
-Google SEO Guide:
-https://developers.google.com/search/docs/fundamentals/seo-starter-guide
+performance-optimized-image.tsx
 
-♿ Accessibility (WCAG 2.1 AA)
-Portfolio follows the WCAG AA checklist:
+Scroll Experience
 
-Keyboard navigable
+Custom scroll listener for progress bar, soft anchor scrolling
 
-High contrast
+project-details/components/ScrollProgress.tsx, smooth-scroll.tsx
 
-Focus ring visibility
+Search Debouncing
 
-ARIA roles
+useDebounce to limit search execution frequency
 
-Proper heading hierarchy
+components/projects/controls/useDebounce.ts
 
-Ref: https://www.w3.org/WAI/standards-guidelines/wcag/
+Code Quality & Resilience
 
-📡 Observability: Logs, Metrics & Monitoring
-Using:
+Error Handling: Implements a global ErrorBoundary to gracefully manage fatal JavaScript runtime errors, providing users with options to reset or refresh [cite: error-boundary.tsx].
 
-Vercel Analytics
+Development Workflow: Enforced strict linting and TypeScript checks to catch issues before deployment [cite: tsconfig.json].
 
-Web Vitals reporting
+🛠 Development & Deployment
 
-Console error boundaries
+Local Setup
 
-Lighthouse auditing
+Clone: git clone <repo-url>
 
-🧪 Testing Strategy
-Recommended Testing Stack:
-Unit tests — Jest + React Testing Library
+Install: npm install
 
-Integration tests — Playwright
+Run Dev: npm run dev
 
-Visual Regression — Chromatic
+Static Deployment
 
-Linting — ESLint + Prettier
+The project is configured for static export, suitable for deployment on any static hosting platform (Vercel, Netlify, GitHub Pages).
 
-🤖 CI/CD Pipeline
-Example GitHub Actions workflow:
+Build Command: npm run build
 
-yaml
-Copy code
-name: CI
+Export Setting: Configured via output: 'export' in next.config.mjs.
 
-on: [push, pull_request]
+Content Authoring
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install deps
-        run: npm install
-      - name: Lint
-        run: npm run lint
-      - name: Build
-        run: npm run build
-📁 Content Authoring Workflow
-Create a new .md file under /content/projects or /content/blog
+To update content, simply modify the corresponding TypeScript/JSON file in the /lib directory or add new entries:
 
-Add frontmatter metadata
+Projects: Edit or add objects in lib/types.ts.
 
-Add images to /public/projects
+Skills: Adjust metrics in lib/skills.ts.
 
-Commit & push
-
-Vercel auto-deploys
-
-🧭 Roadmap
-Short-Term
-Add interactive KPI dashboards
-
-Expand ML case studies
-
-Add “Public Datasets” section
-
-Mid-Term
-Multi-language support
-
-Project tagging + filtering system
-
-Long-Term
-Integrate APIs for real-time analytics
-
-Auto-generated case studies using AI
-
-📄 License
-Distributed under the MIT License. Check LICENSE for details.
-
-🔗 References
-Next.js Docs — https://nextjs.org/docs
-
-React Docs — https://react.dev
-
-TailwindCSS Docs — https://tailwindcss.com
-
-MDN — https://developer.mozilla.org
-
-Google SEO — https://developers.google.com/search
-
-WCAG — https://www.w3.org/WAI/standards-guidelines/wcag/
-
-Vercel Docs — https://vercel.com/docs
-
-yaml
-Copy code
-
----
-
-If you want an even more **ultra-premium GitHub README version with badges**, or a **logo + shields**, or *
+`
