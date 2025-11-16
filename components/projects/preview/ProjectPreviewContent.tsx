@@ -4,7 +4,7 @@ import Image from "next/image";
 import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Project } from "@/lib/types";
-import { getProjectIcon } from "@/components/projects/icons/getProjectIcon";
+import { getProjectIcon } from "@/components/projects/Icons/getProjectIcon";
 import { ProjectActions } from "@/components/projects/actions/ProjectActions";
 import { cn } from "@/lib/utils";
 

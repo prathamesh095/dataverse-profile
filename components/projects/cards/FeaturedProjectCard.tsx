@@ -8,7 +8,7 @@ import { Card, CardContent, CardTitle, CardDescription } from "@/components/ui/c
 import { Badge } from "@/components/ui/badge";
 import { Project } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { getProjectIcon } from "@/components/projects/icons/getProjectIcon";
+import { getProjectIcon } from "@/components/projects/Icons/getProjectIcon";
 import { ProjectActions } from "@/components/projects/actions/ProjectActions";
 
 type Props = {
