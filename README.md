@@ -1,7 +1,7 @@
 
 # 🌌 Executive Data Portfolio — The Next‑Generation Data Identity Platform  
 **Author:** Prathamesh Sanjay Pawar  
-**Live Portfolio:** https://v0-executive-data-portfolio.vercel.app/  
+**Live Portfolio:** [https://v0-executive-data-portfolio.vercel.app](https://prathamesh-pawar-portfolio.vercel.app/)/  
 **Tech Stack:** Next.js • React • TypeScript • TailwindCSS • Framer Motion • Fuse.js • Recharts  
 
 ---
@@ -253,5 +253,6 @@ MIT © 2025 — Prathamesh Sanjay Pawar
 # 📬 Contact  
 Portfolio: https://v0-executive-data-portfolio.vercel.app/  
 Email: pawarprathamesh095@gmail.com  
+
 
 
